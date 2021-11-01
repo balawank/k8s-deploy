@@ -133,6 +133,7 @@ PostgreSQL Database directory appears to contain a database; Skipping initializa
 2021-10-30 06:00:31.270 UTC [1] LOG:  database system is ready to accept connections
 ```
 ## Activemq messaging queue deployment
+
 #### Install persistance volume and volume claim
 ```shell
 ed-activemq-pv-pvc.yml
@@ -142,7 +143,8 @@ ed-activemq-pv-pvc.yml
 ed-activemq-deploy.yml
 ```
 
-#### Redis deployment
+## Redis deployment
+
 Deploy Redis
 ```shell
 ed-redis.yml
