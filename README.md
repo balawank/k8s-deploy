@@ -59,10 +59,6 @@ kubectl create namespace dt
 db namespace will be used for Postgres db and Activemq
 dt namspace will be used for Zipkin,Grafana and Prometheus
 
-```shell
-
-```
-
 ## Setup traefik Edge Router
 
 Below commands will install traefik role based access, custom resource defination, ingress routes for edastakhat.
@@ -92,7 +88,7 @@ After installation of traefik, edit traefik daemonsets and add below config.
       --api.insecure
 ```
 
-### Install traefik dashboard
+## Install traefik dashboard
 ```
 kubectl apply -f /ed-k8s/deploy/dev/traefik/traefik-dashboard.yml
 ```
@@ -102,26 +98,48 @@ What's traefik dashboard?
 * You can also do another thing
 * If you get really randy, you can even do this
 
-### Install Edastakhat Resources
+## Install Edastakhat Resources and Postgres db
 
 The Edastakhat Project.
-```
+### Install secrets, global config maps, volumes for Postgres db
+
+```shell
 kubectl apply -f /ed-k8s/deploy/dev/ed-global-cm.yml
 kubectl apply -f /ed-k8s/deploy/dev/ed-secrets.yml
 kubectl apply -f /ed-k8s/deploy/dev/ed-postgres-secrets.yml
 kubectl apply -f /ed-k8s/deploy/dev/ed-postgres-pv-pvc.yml
 ```
+### Postgres 13.4 database Deployment
+```shell
+ed-postgres-deploy.yml
+```
+list resource in db namespace
+```shell
+kubectl get all -n db
+```
+logs in db pod
+```shell
+kubectl -n db logs pod/postgres-84c49bfc85-nvxkn
+```
+output:
+```shell
+PostgreSQL Database directory appears to contain a database; Skipping initialization
 
-#### Argument 1
-Type: `String`  
-Default: `'default value'`
-
-State what an argument does and how you can use it. If needed, you can provide
-an example below.
-
-Example:
-```bash
-awesome-project "Some other value"  # Prints "You're nailing this readme!"
+2021-10-30 06:00:30.246 UTC [1] LOG:  starting PostgreSQL 13.4 on x86_64-pc-linux-musl, compiled by gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424, 64-bit
+2021-10-30 06:00:30.246 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2021-10-30 06:00:30.246 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2021-10-30 06:00:30.580 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2021-10-30 06:00:31.003 UTC [23] LOG:  database system was shut down at 2021-10-29 14:02:12 UTC
+2021-10-30 06:00:31.270 UTC [1] LOG:  database system is ready to accept connections
+```
+## Activemq messaging queue deployment
+#### Install persistance volume and volume claim
+```shell
+ed-activemq-pv-pvc.yml
+```
+#### Deploy Activemq
+```shell
+ed-activemq-deploy.yml
 ```
 
 #### Argument 2
