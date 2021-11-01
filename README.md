@@ -37,55 +37,80 @@ execute below command
 microk8s stop
 microk8s start
 ```
-## Developing
+## Setup K8s Single Node Microk8s Cluster
 
-Here's a brief intro about what a developer must do in order to start developing
-the project further:
+Follow Order form this step:
 
 ```shell
-git clone https://github.com/your/awesome-project.git
-cd awesome-project/
-packagemanager install
+alias kubectl='microk8s.kubectl'
+microk8s enable rbac
+microk8s enable dns:172.19.65.167
+microk8s enable registry:size=40Gi
+microk8s enable traefik
 ```
 
 And state what happens step-by-step.
 
-### Building
-
-If your project needs some additional steps for the developer to build the
-project after some code changes, state them here:
+## Create namespace
+```shell
+kubectl create namespace db
+kubectl create namespace dt
+```
+db namespace will be used for Postgres db and Activemq
+dt namspace will be used for Zipkin,Grafana and Prometheus
 
 ```shell
-./configure
-make
-make install
+
 ```
 
-Here again you should state what actually happens when the code above gets
-executed.
+## Setup traefik Edge Router
 
-### Deploying / Publishing
-
-In case there's some step you have to take that publishes this project to a
-server, this is the right time to state it.
+Below commands will install traefik role based access, custom resource defination, ingress routes for edastakhat.
+Middlleware for handling traefik routes.
 
 ```shell
-packagemanager deploy awesome-project -s server.com -u username -p password
+kubectl apply -f /ed-k8s/deploy/dev/traefik/traefik-rbac.yml
+kubectl apply -f /ed-k8s/deploy/dev/traefik/traefik-crd.yml
+kubectl apply -f /ed-k8s/deploy/dev/traefik/ed-ingress.yml
+kubectl apply -f /ed-k8s/deploy/dev/traefik/ed-middleware.yml
+```
+After installation of traefik, edit traefik daemonsets and add below config.
+```shell
+      --providers.kubernetesingress=false
+      --providers.kubernetesingress.ingressendpoint.ip=127.0.0.1
+      --log=true
+      --log.level=INFO
+      --accesslog=true
+      --accesslog.filepath=/dev/stdout
+      --accesslog.format=json
+      --entrypoints.web.address=:80
+      --entrypoints.websecure.address=:8443
+      --entrypoints.postgres.address=:5432
+      --providers.kubernetescrd
+      --api.dashboard=true
+      --api
+      --api.insecure
 ```
 
-And again you'd need to tell what the previous code actually does.
+### Install traefik dashboard
+```
+kubectl apply -f /ed-k8s/deploy/dev/traefik/traefik-dashboard.yml
+```
 
-## Features
-
-What's all the bells and whistles this project can perform?
+What's traefik dashboard?
 * What's the main functionality
 * You can also do another thing
 * If you get really randy, you can even do this
 
-## Configuration
+### Install Edastakhat Resources
 
-Here you should write what are all of the configurations a user can enter when
-using the project.
+The Edastakhat Project.
+```
+kubectl apply -f /ed-k8s/deploy/dev/ed-global-cm.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-secrets.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-postgres-secrets.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-postgres-pv-pvc.yml
+```
 
 #### Argument 1
 Type: `String`  
