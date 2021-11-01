@@ -1,4 +1,4 @@
-![Logo of the project](https://raw.githubusercontent.com/jehna/readme-best-practices/master/sample-logo.png)
+![Logo of the project](https://www.egov-nsdl.co.in/img/logo.png)
 
 # NSDL Edastakhat
 > Esign Everywhere
@@ -98,7 +98,7 @@ What's traefik dashboard?
 * You can also do another thing
 * If you get really randy, you can even do this
 
-## Install Edastakhat Resources and Postgres db
+## Install Edastakhat Resources and Postgres 13.4 db
 
 The Edastakhat Project.
 ### Install secrets, global config maps, volumes for Postgres db
@@ -142,12 +142,25 @@ ed-activemq-pv-pvc.yml
 ed-activemq-deploy.yml
 ```
 
-#### Argument 2
-Type: `Number|Boolean`  
-Default: 100
-
-Copy-paste as many of these as you need.
-
+#### Redis deployment
+Deploy Redis
+```shell
+ed-redis.yml
+```
+check redis logs:
+```
+kubectl -n db logs pod/redis-0
+```
+output:
+```
+1:C 30 Oct 2021 06:33:02.114 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 30 Oct 2021 06:33:02.114 # Redis version=6.2.3, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 30 Oct 2021 06:33:02.114 # Configuration loaded
+1:M 30 Oct 2021 06:33:02.116 * monotonic clock: POSIX clock_gettime
+1:M 30 Oct 2021 06:33:02.117 * Running mode=standalone, port=6379.
+1:M 30 Oct 2021 06:33:02.118 # Server initialized
+1:M 30 Oct 2021 06:33:02.118 * Ready to accept connections
+```
 ## Contributing
 
 When you publish something open source, one of the greatest motivations is that
