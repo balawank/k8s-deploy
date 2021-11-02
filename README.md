@@ -163,6 +163,109 @@ output:
 1:M 30 Oct 2021 06:33:02.118 # Server initialized
 1:M 30 Oct 2021 06:33:02.118 * Ready to accept connections
 ```
+## Edastakhat Eureka Deployment
+### Eureka Discovery Server
+```shell
+ed-registry.yml
+```
+Eureka 2 instance should be up, wait for a moment and check browser Eureka cluster running or not.
+Check Eureka instance are ready
+http://eureka.dev.edastakhat.nsdl.com
+
+## Edastakhat Config Server Deployment
+Config server target are located in mount path of deployment.
+
+### Deploy PV, PVC and deployment
+```shell
+ed-config-pv-pvc.yml
+ed-config.yml
+```
+Check config server logs before proceed ahead.
+Check all config loaded from github.
+
+## Edastakhat API Gateway Deployment
+### Deployment Spring Cloud Gateway
+```shell
+ed-agw.yml
+```
+Check API gateway
+http://agw.dev.edastakhat.nsdl.com
+
+## Edastakhat Authorization Server Deployment
+```shell
+ed-auth.yml
+```
+## Edastakhat Invoice Service Deployment
+```shell
+ed-inv-pv-pvc.yml
+ed-invoice.yml
+```
+## Edastakhat Service Deployment
+```shell
+ed-pv-pvc.yml
+ed-edastakhat.yml
+```
+## Edastakhat Captcha Service Deployment
+```shell
+ed-captcha.yml
+```
+## Edastakhat Stamping Service
+```shell
+ed-stamp-pv-pvc.yml
+ed-stamp.yml
+```
+## Edastakhat SMS Service
+```shell
+ed-sms.yml
+```
+## Edastakhat Email Service
+```shell
+ed-email.yml
+```
+## Edastakhat OTP Service
+```shell
+ed-otp-pv-pvc.yml
+ed-otp.yml
+```
+## Edastakhat UI
+```shell
+ed-ui.yml
+```
+
+## Kubernetes Dashboard Configuration
+Read below blogs
+http://blog.zachinachshon.com/k8s-dashboard/
+https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+
+```shell
+microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --address 0.0.0.0
+microk8s kubectl apply -f  /k8s/sa-k8s-admin-user.yml
+microk8s kubectl -n kube-system describe sa dashboard-admin
+microk8s kubectl -n kube-system describe secrets dashboard-admin-token-kvqw2
+```
+### Kubernetes Dashboard SSL config
+Create tls certificate using openssl.
+https://github.com/kubernetes/dashboard/blob/master/docs/user/certificate-management.md
+https://github.com/kubernetes/dashboard/blob/master/docs/user/installation.md#recommended-setup
+
+list Kubernetes dashboard services
+```shell
+kubectl -n kube-system create secret generic kubernetes-dashboard-certs --from-file=$HOME/certs
+microk8s kubectl edit deployment.apps/kubernetes-dashboard  -n kube-system
+```
+Add args in deployment and restart kubernetes dashboard deployment.
+
+```shell
+- --tls-cert-file=/tls.crt
+- --tls-key-file=/tls.key
+```
+## Traefik websecure SSL port change
+Edit traefik daemonset and change websecure port from 8443 to 443.
+Edit daemonset and change port.
+```shell
+microk8s kubectl -n traefik edit daemonset.apps/traefik-ingress-controller
+```
+
 ## Contributing
 
 When you publish something open source, one of the greatest motivations is that
