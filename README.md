@@ -170,7 +170,7 @@ kubectl apply -f /ed-k8s/deploy/dev/ed-registry.yml
 ```
 Eureka 2 instance should be up, wait for a moment and check browser Eureka cluster running or not.
 Check Eureka instance are ready
-http://eureka.dev.edastakhat.nsdl.com
+- Eureka: http://eureka.dev.edastakhat.nsdl.com
 
 ## Edastakhat Config Server Deployment
 Config server target are located in mount path of deployment.
@@ -233,14 +233,15 @@ kubectl apply -f /ed-k8s/deploy/dev/ed-ui.yml
 - Edastakhat: http://agw.dev.edastakhat.nsdl.com/ed/
 
 ## Kubernetes Dashboard Configuration
-Read below blogs
-http://blog.zachinachshon.com/k8s-dashboard/
-https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+Read below blogs:
+- Ref1: http://blog.zachinachshon.com/k8s-dashboard/
+- Ref2: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 
 Our cluster is enabled with RBAC.
 We need to create a user for dashboard access.
 Create ServiceAccount, ClusterRole and ClusterRoleBinding
-```microk8s kubectl apply -f  /k8s/sa-k8s-admin-user.yml
+```shell
+microk8s kubectl apply -f  /k8s/sa-k8s-admin-user.yml
 ```
 ```shell
 microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --address 0.0.0.0
@@ -286,7 +287,7 @@ guide), you should link it here. If there's a lot of things to take into
 consideration, it is common to separate this section to its own file called
 `CONTRIBUTING.md` (or similar). If so, you should say that it exists here.
 
-## Links
+## Links and References
 
 Even though this information can be found inside the project on machine-readable
 format like in a .json file, it's good to include a summary of most useful
@@ -305,8 +306,4 @@ links to humans using your project. You can include links like:
 
 ## Licensing
 
-One really important part: Give your project a proper license. Here you should
-state what the license is and how to find the text version of the license.
-Something like:
-
-"The code in this project is licensed under MIT license."
+NSDL eGovernance Ltd
