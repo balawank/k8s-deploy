@@ -111,7 +111,7 @@ kubectl apply -f /ed-k8s/deploy/dev/ed-postgres-pv-pvc.yml
 ```
 ### Postgres 13.4 database Deployment
 ```shell
-ed-postgres-deploy.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-postgres-deploy.yml
 ```
 list resource in db namespace
 ```shell
@@ -136,18 +136,18 @@ PostgreSQL Database directory appears to contain a database; Skipping initializa
 
 #### Install persistance volume and volume claim
 ```shell
-ed-activemq-pv-pvc.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-activemq-pv-pvc.yml
 ```
 #### Deploy Activemq
 ```shell
-ed-activemq-deploy.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-activemq-deploy.yml
 ```
 
 ## Redis deployment
 
 Deploy Redis
 ```shell
-ed-redis.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-redis.yml
 ```
 check redis logs:
 ```
@@ -166,7 +166,7 @@ output:
 ## Edastakhat Eureka Deployment
 ### Eureka Discovery Server
 ```shell
-ed-registry.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-registry.yml
 ```
 Eureka 2 instance should be up, wait for a moment and check browser Eureka cluster running or not.
 Check Eureka instance are ready
@@ -177,8 +177,8 @@ Config server target are located in mount path of deployment.
 
 ### Deploy PV, PVC and deployment
 ```shell
-ed-config-pv-pvc.yml
-ed-config.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-config-pv-pvc.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-config.yml
 ```
 Check config server logs before proceed ahead.
 Check all config loaded from github.
@@ -186,67 +186,71 @@ Check all config loaded from github.
 ## Edastakhat API Gateway Deployment
 ### Deployment Spring Cloud Gateway
 ```shell
-ed-agw.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-agw.yml
 ```
-Check API gateway
-http://agw.dev.edastakhat.nsdl.com
+- Check API gateway: http://agw.dev.edastakhat.nsdl.com
 
 ## Edastakhat Authorization Server Deployment
 ```shell
-ed-auth.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-auth.yml
 ```
 ## Edastakhat Invoice Service Deployment
 ```shell
-ed-inv-pv-pvc.yml
-ed-invoice.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-inv-pv-pvc.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-invoice.yml
 ```
 ## Edastakhat Service Deployment
 ```shell
-ed-pv-pvc.yml
-ed-edastakhat.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-pv-pvc.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-edastakhat.yml
 ```
 ## Edastakhat Captcha Service Deployment
 ```shell
-ed-captcha.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-captcha.yml
 ```
 ## Edastakhat Stamping Service
 ```shell
-ed-stamp-pv-pvc.yml
-ed-stamp.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-stamp-pv-pvc.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-stamp.yml
 ```
 ## Edastakhat SMS Service
 ```shell
-ed-sms.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-sms.yml
 ```
 ## Edastakhat Email Service
 ```shell
-ed-email.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-email.yml
 ```
 ## Edastakhat OTP Service
 ```shell
-ed-otp-pv-pvc.yml
-ed-otp.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-otp-pv-pvc.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-otp.yml
 ```
 ## Edastakhat UI
 ```shell
-ed-ui.yml
+kubectl apply -f /ed-k8s/deploy/dev/ed-ui.yml
 ```
+- Edastakhat: http://agw.dev.edastakhat.nsdl.com/ed/
 
 ## Kubernetes Dashboard Configuration
 Read below blogs
 http://blog.zachinachshon.com/k8s-dashboard/
 https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 
+Our cluster is enabled with RBAC.
+We need to create a user for dashboard access.
+Create ServiceAccount, ClusterRole and ClusterRoleBinding
+```microk8s kubectl apply -f  /k8s/sa-k8s-admin-user.yml
+```
 ```shell
 microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --address 0.0.0.0
-microk8s kubectl apply -f  /k8s/sa-k8s-admin-user.yml
 microk8s kubectl -n kube-system describe sa dashboard-admin
 microk8s kubectl -n kube-system describe secrets dashboard-admin-token-kvqw2
 ```
 ### Kubernetes Dashboard SSL config
 Create tls certificate using openssl.
-https://github.com/kubernetes/dashboard/blob/master/docs/user/certificate-management.md
-https://github.com/kubernetes/dashboard/blob/master/docs/user/installation.md#recommended-setup
+- Ref1: https://github.com/kubernetes/dashboard/blob/master/docs/user/certificate-management.md
+- Ref2: https://github.com/kubernetes/dashboard/blob/master/docs/user/installation.md#recommended-setup
 
 list Kubernetes dashboard services
 ```shell
